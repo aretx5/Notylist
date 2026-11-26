@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
   images: {
     remotePatterns: [
       {
@@ -29,11 +33,9 @@ const nextConfig = {
       },
     ],
   },
-  // Required for Vercel deployment
   experimental: {
-    serverActions: {
-      allowedOrigins: ['localhost:3000'],
-    },
+    optimizeCss: true,
+    optimizePackageImports: ['react-icons'],
   },
 };
 

@@ -39,7 +39,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Changed - no loading screen
 
   useEffect(() => {
     setMounted(true);
@@ -71,8 +71,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     } catch (error) {
       console.error('Auth error:', error);
       router.replace('/login');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -107,8 +105,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: FiTrash2, label: 'Trash', href: '/dashboard/notes?filter=trash' },
   ];
 
-  if (!mounted || loading) {
-    return <PageLoader />;
+  const handleNavClick = (href: string) => {
+    setSidebarOpen(false);
+    router.push(href);
+  };
+
+  // Render immediately without loading screen
+  if (!mounted) {
+    return null;
   }
 
   return (

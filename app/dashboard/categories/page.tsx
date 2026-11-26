@@ -29,7 +29,7 @@ const COLORS = [
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Changed to false for instant render
   const [showModal, setShowModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState<any>(null);
   const [formData, setFormData] = useState({
@@ -52,8 +52,6 @@ export default function CategoriesPage() {
       }
     } catch (error) {
       toast.error('Failed to load categories');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -144,9 +142,9 @@ export default function CategoriesPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <DashboardLayout>
+  // Render immediately without loading check
+  return (
+    <DashboardLayout>
         <div className="animate-pulse space-y-4">
           {[1, 2, 3].map((i) => (
             <div key={i} className="h-24 bg-gray-200 dark:bg-gray-700 rounded-xl" />

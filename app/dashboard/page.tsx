@@ -20,7 +20,7 @@ import { StatCardSkeleton } from '@/components/SkeletonLoader';
 export default function DashboardPage() {
   const router = useRouter();
   const [stats, setStats] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Changed to false
 
   useEffect(() => {
     fetchStats();

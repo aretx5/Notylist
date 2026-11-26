@@ -225,6 +225,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div
           className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
+          aria-label="Close sidebar"
         />
       )}
 
@@ -324,7 +325,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Main Content */}
       <main className="flex-1 w-full lg:ml-64">
         <div className="min-h-screen w-full pt-16 lg:pt-0">
-          <div className="p-4 sm:p-6 lg:p-8 pb-20 lg:pb-8 max-w-full">
+          <div className="p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 max-w-full">
             {children}
           </div>
         </div>

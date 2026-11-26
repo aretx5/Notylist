@@ -33,7 +33,6 @@ const nextConfig = {
     ],
   },
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['react-icons'],
   },
 };

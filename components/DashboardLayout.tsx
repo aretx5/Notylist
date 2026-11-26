@@ -43,20 +43,34 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   useEffect(() => {
     setMounted(true);
-    fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      fetchUser();
+    }
+  }, [mounted]);
 
   const fetchUser = async () => {
     try {
-      const response = await fetch('/api/auth/me');
+      const response = await fetch('/api/auth/me', {
+        credentials: 'include',
+        cache: 'no-store',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Auth check failed');
+      }
+      
       const data = await response.json();
       if (data.success) {
         setUser(data.user);
       } else {
-        router.push('/login');
+        router.replace('/login');
       }
     } catch (error) {
-      router.push('/login');
+      console.error('Auth error:', error);
+      router.replace('/login');
     } finally {
       setLoading(false);
     }

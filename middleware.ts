@@ -60,38 +60,53 @@ export async function middleware(req: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  try {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
-  const { pathname } = req.nextUrl;
+    // If auth check fails, log but don't block
+    if (error) {
+      console.error('Middleware auth error:', error);
+      return response;
+    }
 
-  // Allow OAuth callback to process without interference
-  if (pathname.startsWith('/auth/callback')) {
+    const { pathname } = req.nextUrl;
+
+    // Allow OAuth callback to process without interference
+    if (pathname.startsWith('/auth/callback')) {
+      return response;
+    }
+
+    // Protected routes
+    const protectedRoutes = ['/dashboard'];
+    const isProtectedRoute = protectedRoutes.some((route) =>
+      pathname.startsWith(route)
+    );
+
+    // Auth routes
+    const authRoutes = ['/login', '/signup'];
+    const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+
+    // If protected route and no user, redirect to login
+    if (isProtectedRoute && !user) {
+      const loginUrl = new URL('/login', req.url);
+      loginUrl.searchParams.set('redirect', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // If auth route and user exists, redirect to dashboard or redirect param
+    if (isAuthRoute && user) {
+      const redirectTo = req.nextUrl.searchParams.get('redirect') || '/dashboard';
+      return NextResponse.redirect(new URL(redirectTo, req.url));
+    }
+
+    return response;
+  } catch (error) {
+    console.error('Middleware error:', error);
     return response;
   }
-
-  // Protected routes
-  const protectedRoutes = ['/dashboard'];
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
-
-  // Auth routes
-  const authRoutes = ['/login', '/signup'];
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-
-  // If protected route and no user, redirect to login
-  if (isProtectedRoute && !user) {
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
-
-  // If auth route and user exists, redirect to dashboard
-  if (isAuthRoute && user) {
-    return NextResponse.redirect(new URL('/dashboard', req.url));
-  }
-
-  return response;
 }
 
 export const config = {

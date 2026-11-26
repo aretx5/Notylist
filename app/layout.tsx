@@ -41,9 +41,32 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <script dangerouslySetInnerHTML={{ __html: `
+          // Service Worker with cleanup for broken versions
           if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-              navigator.serviceWorker.register('/sw.js').catch(() => {});
+            window.addEventListener('load', async () => {
+              try {
+                // Unregister old broken service workers
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (const registration of registrations) {
+                  const sw = registration.active || registration.waiting || registration.installing;
+                  if (sw && sw.scriptURL.includes('/sw.js')) {
+                    // Check if it's the new version by testing cache name
+                    const hasOldCache = await caches.has('notylist-v1');
+                    if (hasOldCache) {
+                      console.log('Cleaning up old service worker...');
+                      await registration.unregister();
+                      await caches.delete('notylist-v1');
+                      // Wait a bit before registering new SW
+                      await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+                  }
+                }
+                
+                // Register new service worker
+                await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+              } catch (error) {
+                console.warn('Service worker registration failed:', error);
+              }
             });
           }
         `}} />

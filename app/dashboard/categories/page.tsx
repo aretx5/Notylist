@@ -142,18 +142,6 @@ export default function CategoriesPage() {
     }
   };
 
-  // Render immediately without loading check
-  return (
-    <DashboardLayout>
-        <div className="animate-pulse space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-24 bg-gray-200 dark:bg-gray-700 rounded-xl" />
-          ))}
-        </div>
-      </DashboardLayout>
-    );
-  }
-
   return (
     <DashboardLayout>
       <div className="space-y-6">

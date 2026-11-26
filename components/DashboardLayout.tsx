@@ -95,8 +95,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: FiFileText, label: 'All Notes', href: '/dashboard/notes' },
     { icon: FiFolder, label: 'Categories', href: '/dashboard/categories' },
     { icon: FiCheckSquare, label: 'To-Do List', href: '/dashboard/todos' },
-    { icon: FiDownload, label: 'Download Tools', href: '/dashboard/tools' },
     { icon: FiImage, label: 'QR Generator', href: '/dashboard/qr-generator' },
+    { icon: FiDownload, label: 'Tools', href: '/dashboard/tools' },
   ];
 
   const secondaryNavItems: NavItem[] = [

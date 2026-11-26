@@ -6,7 +6,7 @@ import DashboardLayout from '@/components/DashboardLayout';
 import {
   FiPlus, FiSearch, FiGrid, FiList, FiMoreVertical,
   FiEdit, FiTrash, FiCopy, FiStar, FiChevronLeft,
-  FiChevronRight, FiFileText, FiWifiOff,
+  FiChevronRight, FiFileText, FiWifiOff, FiMapPin,
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';

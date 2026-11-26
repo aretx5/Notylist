@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
+import WaveLoader from '@/components/WaveLoader';
 import { useTheme } from 'next-themes';
 import { FiSun, FiMoon, FiMonitor, FiTrash2, FiLogOut, FiMail, FiShield, FiWifiOff, FiRefreshCw } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -16,12 +17,22 @@ export default function SettingsPage() {
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [showWaveLoader, setShowWaveLoader] = useState(true);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const { offline, isOnline, toggle } = useOffline();
   const [lastSynced, setLastSynced] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Show wave loader for 1 second
+    const timer = setTimeout(() => {
+      setShowWaveLoader(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -104,6 +115,10 @@ export default function SettingsPage() {
       setDeleting(false);
     }
   };
+
+  if (showWaveLoader) {
+    return <WaveLoader />;
+  }
 
   if (loading || !mounted) {
     return (

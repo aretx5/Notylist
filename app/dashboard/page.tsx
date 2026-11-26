@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
+import WaveLoader from '@/components/WaveLoader';
 import {
   FiFileText,
   FiStar,
@@ -21,9 +22,17 @@ export default function DashboardPage() {
   const router = useRouter();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(false); // Changed to false
+  const [showWaveLoader, setShowWaveLoader] = useState(true);
 
   useEffect(() => {
+    // Show wave loader for 1 second
+    const timer = setTimeout(() => {
+      setShowWaveLoader(false);
+    }, 1000);
+
     fetchStats();
+
+    return () => clearTimeout(timer);
   }, []);
 
   const fetchStats = async () => {
@@ -51,6 +60,10 @@ export default function DashboardPage() {
       setLoading(false);
     }
   };
+
+  if (showWaveLoader) {
+    return <WaveLoader />;
+  }
 
   return (
     <DashboardLayout>

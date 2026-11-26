@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import WaveLoader from '@/components/WaveLoader';
 import { FiKey, FiCopy, FiRefreshCw } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
@@ -9,6 +10,16 @@ export default function KeyGeneratorPage() {
   const [keyType, setKeyType] = useState<'uuid' | 'base64' | 'hex'>('uuid');
   const [keyLength, setKeyLength] = useState(32);
   const [generatedKey, setGeneratedKey] = useState('');
+  const [showWaveLoader, setShowWaveLoader] = useState(true);
+
+  useEffect(() => {
+    // Show wave loader for 1 second
+    const timer = setTimeout(() => {
+      setShowWaveLoader(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const generateKey = () => {
     let key = '';
@@ -39,6 +50,10 @@ export default function KeyGeneratorPage() {
     navigator.clipboard.writeText(generatedKey);
     toast.success('Key copied to clipboard');
   };
+
+  if (showWaveLoader) {
+    return <WaveLoader />;
+  }
 
   return (
     <DashboardLayout>

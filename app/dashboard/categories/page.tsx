@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import WaveLoader from '@/components/WaveLoader';
 import { FiPlus, FiEdit, FiTrash, FiX, FiFolder } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
@@ -30,6 +31,7 @@ const COLORS = [
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(false); // Changed to false for instant render
+  const [showWaveLoader, setShowWaveLoader] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState<any>(null);
   const [formData, setFormData] = useState({
@@ -39,7 +41,14 @@ export default function CategoriesPage() {
   });
 
   useEffect(() => {
+    // Show wave loader for 1 second
+    const timer = setTimeout(() => {
+      setShowWaveLoader(false);
+    }, 1000);
+
     fetchCategories();
+
+    return () => clearTimeout(timer);
   }, []);
 
   const fetchCategories = async () => {
@@ -141,6 +150,10 @@ export default function CategoriesPage() {
       toast.error('Failed to delete category');
     }
   };
+
+  if (showWaveLoader) {
+    return <WaveLoader />;
+  }
 
   return (
     <DashboardLayout>

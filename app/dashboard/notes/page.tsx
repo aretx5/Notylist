@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
+import WaveLoader from '@/components/WaveLoader';
 import {
   FiPlus, FiSearch, FiGrid, FiList, FiMoreVertical,
   FiEdit, FiTrash, FiCopy, FiStar, FiChevronLeft,
@@ -19,6 +20,7 @@ function NotesContent() {
   const [notes, setNotes] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showWaveLoader, setShowWaveLoader] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [sortBy, setSortBy] = useState('updatedAt');
@@ -28,6 +30,15 @@ function NotesContent() {
   const [showMenu, setShowMenu] = useState<string | null>(null);
 
   const filter = searchParams.get('filter') || '';
+
+  useEffect(() => {
+    // Show wave loader for 1 second
+    const timer = setTimeout(() => {
+      setShowWaveLoader(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
   const action = searchParams.get('action');
   const [offline] = useState(() => isOfflineMode());
 
@@ -175,6 +186,10 @@ function NotesContent() {
     if (filter === 'trash') return 'Trash';
     return 'All Notes';
   };
+
+  if (showWaveLoader) {
+    return <WaveLoader />;
+  }
 
   return (
     <DashboardLayout>

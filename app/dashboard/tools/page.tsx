@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import WaveLoader from '@/components/WaveLoader';
 import { 
   FiDownload, 
   FiImage, 
@@ -21,6 +22,16 @@ export default function ToolsPage() {
   const [selectedImport, setSelectedImport] = useState({ notes: true, todos: true });
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [showWaveLoader, setShowWaveLoader] = useState(true);
+
+  useEffect(() => {
+    // Show wave loader for 1 second
+    const timer = setTimeout(() => {
+      setShowWaveLoader(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
   
   // Random Key Generator state
   const [keyType, setKeyType] = useState<'uuid' | 'base64' | 'hex'>('uuid');
@@ -157,6 +168,10 @@ export default function ToolsPage() {
     navigator.clipboard.writeText(generatedKey);
     toast.success('Key copied to clipboard');
   };
+
+  if (showWaveLoader) {
+    return <WaveLoader />;
+  }
 
   return (
     <DashboardLayout>

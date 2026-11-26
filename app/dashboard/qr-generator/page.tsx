@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import WaveLoader from '@/components/WaveLoader';
 import { FiDownload, FiCopy, FiCheck, FiZap, FiUpload, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import QRCode from 'qrcode';
@@ -37,6 +38,7 @@ export default function QRGeneratorPage() {
   const [text, setText] = useState('');
   const [qrCode, setQrCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showWaveLoader, setShowWaveLoader] = useState(true);
   const [copied, setCopied] = useState(false);
   const [themeIdx, setThemeIdx] = useState(0);
   const [size, setSize] = useState(300);
@@ -44,6 +46,15 @@ export default function QRGeneratorPage() {
   const [centerImage, setCenterImage] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    // Show wave loader for 1 second
+    const timer = setTimeout(() => {
+      setShowWaveLoader(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const generate = async () => {
     if (!text.trim()) { toast.error('Enter some text first'); return; }
@@ -143,6 +154,10 @@ export default function QRGeneratorPage() {
   };
 
   const displaySize = Math.min(size, 260);
+
+  if (showWaveLoader) {
+    return <WaveLoader />;
+  }
 
   return (
     <DashboardLayout>

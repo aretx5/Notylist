@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import WaveLoader from '@/components/WaveLoader';
 import {
   FiCheckCircle, FiCircle, FiPlus, FiTrash2,
   FiClock, FiFlag, FiX, FiChevronDown, FiChevronUp, FiWifiOff,
@@ -26,6 +27,7 @@ interface Todo {
 export default function TodosPage() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showWaveLoader, setShowWaveLoader] = useState(true);
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('active');
   const [priorityFilter, setPriorityFilter] = useState<string>('');
   const [showCompleted, setShowCompleted] = useState(true);
@@ -38,6 +40,15 @@ export default function TodosPage() {
     priority: 'medium' as 'low' | 'medium' | 'high',
     due_date: '', category: '',
   });
+
+  useEffect(() => {
+    // Show wave loader for 1 second
+    const timer = setTimeout(() => {
+      setShowWaveLoader(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => { fetchTodos(); }, [filter, priorityFilter]);
 
@@ -147,6 +158,10 @@ export default function TodosPage() {
   const activeTodos = todos.filter((t) => !t.is_completed);
   const completedTodos = todos.filter((t) => t.is_completed);
   const completionRate = todos.length > 0 ? Math.round((completedTodos.length / todos.length) * 100) : 0;
+
+  if (showWaveLoader) {
+    return <WaveLoader />;
+  }
 
   return (
     <DashboardLayout>

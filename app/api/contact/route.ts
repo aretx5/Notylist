@@ -23,14 +23,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Send email
-    const emailSent = await sendContactEmail(name, email, subject, message);
-
-    if (!emailSent) {
-      return NextResponse.json(
-        { success: false, message: 'Failed to send message. Please try again.' },
-        { status: 500 }
-      );
-    }
+    await sendContactEmail({ name, email, subject, message });
 
     return NextResponse.json({
       success: true,

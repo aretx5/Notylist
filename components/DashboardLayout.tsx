@@ -98,9 +98,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-surface border-r border-border">
+      <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:z-50 bg-surface border-r border-border">
         {/* Logo */}
         <div className="h-16 flex items-center px-6 border-b border-border">
           <Link href="/dashboard" className="flex items-center gap-2 group">
@@ -308,9 +308,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 lg:pl-64 pt-16 lg:pt-0">
-        <div className="p-6 lg:p-8 pb-20 lg:pb-8">
-          {children}
+      <main className="flex-1 w-full lg:ml-64">
+        <div className="min-h-screen w-full pt-16 lg:pt-0">
+          <div className="p-4 sm:p-6 lg:p-8 pb-20 lg:pb-8 max-w-full">
+            {children}
+          </div>
         </div>
       </main>
 

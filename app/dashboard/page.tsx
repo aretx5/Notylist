@@ -29,14 +29,23 @@ export default function DashboardPage() {
   const fetchStats = async () => {
     try {
       const response = await fetch('/api/notes/stats');
+      
+      if (!response.ok) {
+        console.error('Stats API error:', response.status, response.statusText);
+        setLoading(false);
+        return;
+      }
+      
       const data = await response.json();
 
       if (data.success) {
         setStats(data.stats);
       } else {
+        console.error('Stats fetch failed:', data);
         toast.error('Failed to load dashboard stats');
       }
     } catch (error) {
+      console.error('Stats fetch error:', error);
       toast.error('Failed to load dashboard');
     } finally {
       setLoading(false);

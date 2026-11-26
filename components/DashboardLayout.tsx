@@ -19,6 +19,7 @@ import {
   FiDownload,
   FiImage,
   FiUser,
+  FiKey,
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { PageLoader } from '@/components/LoadingSpinner';
@@ -96,6 +97,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: FiFolder, label: 'Categories', href: '/dashboard/categories' },
     { icon: FiCheckSquare, label: 'To-Do List', href: '/dashboard/todos' },
     { icon: FiImage, label: 'QR Generator', href: '/dashboard/qr-generator' },
+    { icon: FiKey, label: 'Key Generator', href: '/dashboard/key-generator' },
     { icon: FiDownload, label: 'Tools', href: '/dashboard/tools' },
   ];
 
